@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<constant name="struts.devMode" value="true" />
+	<!-- 配置Action的扩展后缀 -->
+	<constant name="struts.action.extension" value="action"></constant>
+	<!-- 设置表单主题样式 -->
+	<constant name="struts.ui.theme" value="simple"></constant>
+	<!-- 配置国际化文件 -->
+	<constant name="struts.custom.i18n.resources" value="message"></constant>
+	<package name="default" namespace="/" extends="struts-default">
+		<interceptors>
+			<!-- 自定义拦截器 -->
+			<interceptor name="checkPrivilege"
+				class="cn.itcast.oa.web.interceptor.CheckPrivilegeInterceptor"></interceptor>
+
+			<!-- 自定义拦截器栈 -->
+			<interceptor-stack name="myStack">
+				<interceptor-ref name="checkPrivilege"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+		<!-- 指定默认的拦截器栈 -->
+		<default-interceptor-ref name="myStack"></default-interceptor-ref>
+
+		<global-results>
+			<result name="loginUI">/index.jsp</result>
+			<result name="noPrivilegeUI">/noPrivilegeUI.jsp</result>
+		</global-results>
+
+		<action name="bookAction_*" class="bookAction" method="{1}">
+			<result name="success">/index.jsp</result>
+		</action>
+		<!-- 岗位管理Action -->
+		<action name="roleAction_*" class="roleAction" method="{1}">
+			<result name="list">/WEB-INF/jsp/role/list.jsp</result>
+			<result name="toList" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">roleAction_list</param>
+			</result>
+			<result name="saveUI">/WEB-INF/jsp/role/saveUI.jsp</result>
+			<result name="updateUI">/WEB-INF/jsp/role/saveUI.jsp</result>
+			<result name="input">/WEB-INF/jsp/role/saveUI.jsp</result>
+			<result name="setPrivilegeUI">/WEB-INF/jsp/role/setPrivilegeUI.jsp</result>
+		</action>
+		<!-- 部门管理Action -->
+		<action name="departmentAction_*" class="departmentAction"
+			method="{1}">
+			<result name="list">/WEB-INF/jsp/department/list.jsp</result>
+			<result name="toList" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">departmentAction_list?parentId=${parentId}</param>
+			</result>
+			<result name="saveUI">/WEB-INF/jsp/department/saveUI.jsp</result>
+			<result name="updateUI">/WEB-INF/jsp/department/saveUI.jsp</result>
+		</action>
+		<!-- 用户管理Action -->
+		<action name="userAction_*" class="userAction" method="{1}">
+			<result name="list">/WEB-INF/jsp/user/list.jsp</result>
+			<result name="toList" type="redirectAction">
+				<param name="namespace">/</param>
+				<param name="actionName">userAction_list</param>
+			</result>
+			<result name="saveUI">/WEB-INF/jsp/user/saveUI.jsp</result>
+			<result name="updateUI">/WEB-INF/jsp/user/saveUI.jsp</result>
+			<result name="home">/WEB-INF/jsp/home/index.jsp</result>
+			<result name="loginUI">/index.jsp</result>
+		</action>
+		<!-- 首页Action -->
+		<action name="homeAction_*" class="homeAction" method="{1}">
+			<result name="{1}">/WEB-INF/jsp/home/{1}.jsp</result>
+		</action>
+	</package>
+</struts>

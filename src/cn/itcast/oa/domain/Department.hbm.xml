@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="cn.itcast.oa.domain.Department" table="itcast_department">
+		<id name="id">
+			<generator class="native"></generator>
+		</id>
+		<property name="name" length="64" />
+		<property name="description" />
+		<!-- 配置子部门和上级部门之间的多对一关系 -->
+		<many-to-one name="parent" class="cn.itcast.oa.domain.Department" column="parentId"></many-to-one>
+		<!-- 配置上级部门和子部门之间的一对多关系 -->
+		<set name="children" cascade="delete">
+			<key column="parentId"></key>
+			<one-to-many class="cn.itcast.oa.domain.Department"/>
+		</set>
+	</class>
+</hibernate-mapping>
